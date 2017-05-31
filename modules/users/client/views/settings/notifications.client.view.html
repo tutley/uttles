@@ -1,0 +1,55 @@
+<section class="row" ng-controller="NotificationsController" ng-init="find()">
+  <div class="col-md-12">
+    <div class="alert alert-danger" ng-show="error" ng-cloak>
+        {{ error }}
+    </div>
+    <h4>Your Notifications</h4>
+    <accordion close-others="true">
+      <accordion-group is-open="status.open" ng-repeat="notification in notifications">
+        <accordion-heading>
+          <span ng-click="markRead(notification)" ng-show="!notification.read">{{ notification.reply.uttle.title }}</span>
+          <small ng-show="notification.read">{{ notification.reply.uttle.title }}</small>
+          <small class="pull-right"><i class="glyphicon glyphicon-time"></i>
+            <time title="{{ notification.reply.created | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}" am-time-ago="notification.reply.created"></time>
+          </small>
+        </accordion-heading>
+          <div class="row">
+            <div class="col-sm-9">
+              <h5>{{  notification.reply.user.displayName }} <small>had this to say:</small></h5>
+              <p class="bg-warning" style="padding: 8px; margin 8px;">{{ notification.reply.content }}</p>
+              <small>
+                <button class="btn btn-danger btn-xs" ng-click="archive(notification)">
+                  <i class="glyphicon glyphicon-trash"></i> Archive
+                </button>&nbsp;&nbsp;
+                <i class="glyphicon glyphicon-comment"></i> {{ notification.reply.replies.length }} replies to this
+                &nbsp; - &nbsp;
+                <i class="glyphicon glyphicon-link"></i>
+                <a ng-href="/{{ notification.reply.uttle._id }}?scrollTo={{ notification.reply._id }}">Direct Link</a>           
+            </small>
+            </div>
+            <div class="col-sm-3">
+              <a ng-href="#" class="thumbnail">
+                <img ng-if="notification.reply.uttle.imageUrl" ng-src="{{ notification.reply.uttle.imageUrl }}">
+                <img ng-if="!notification.reply.uttle.imageUrl" src="http://i.imgur.com/4QaWChJ.png" alt="A thumbnail image by Andrew Fitzsimon.">
+              </a>
+            </div>
+          </div>
+      </accordion-group>
+    </accordion>
+  </div>
+
+
+
+<update-title title="Uttles - A Website for Discussion"></update-title>
+<update-meta name="description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<!-- facebook -->
+<update-meta property="og:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta property="og:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta property="og:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+<!-- twitter -->
+<update-meta name="twitter:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta name="twitter:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta name="twitter:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+
+
+</section>

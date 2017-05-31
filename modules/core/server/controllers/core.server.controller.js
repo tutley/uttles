@@ -1,0 +1,55 @@
+'use strict';
+
+
+
+  // Define static uttle page
+  // /perma/:replyId
+  //app.route('/perma/:replyId').get(core.renderPermaUttle);
+exports.renderPermaUttle = function(req, res) {
+  res.render('modules/core/server/views/uttle', {
+    user: req.user || null,
+    reply: req.reply,
+    oUrl : 'http://uttles.com/uttle/' + req.reply._id
+  });
+};
+
+/**
+ * Render the main application page
+ */
+exports.renderIndex = function (req, res) {
+  res.render('modules/core/server/views/index', {
+    user: req.user || null
+  });
+};
+
+/**
+ * Render the server error page
+ */
+exports.renderServerError = function (req, res) {
+  res.status(500).render('modules/core/server/views/500', {
+    error: 'Oops! Something went wrong...'
+  });
+};
+
+/**
+ * Render the server not found responses
+ * Performs content-negotiation on the Accept HTTP header
+ */
+exports.renderNotFound = function (req, res) {
+
+  res.status(404).format({
+    'text/html': function () {
+      res.render('modules/core/server/views/404', {
+        url: req.originalUrl
+      });
+    },
+    'application/json': function () {
+      res.json({
+        error: 'Path not found'
+      });
+    },
+    'default': function () {
+      res.send('Path not found');
+    }
+  });
+};

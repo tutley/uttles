@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <base href="/">
+  <title>A Uttle about '{{reply.uttle.title}}'</title>
+  <meta name="description" content="{{reply.content|striptags}}">
+  <meta name="fragment" content="!">
+
+  <!-- Apple META -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Facebook META -->
+  <meta property="fb:app_id" content="{{facebookAppId}}">
+  <meta property="og:site_name" content="Uttles.com">
+  <meta property="og:title" content="A Uttle about '{{reply.uttle.title}}'">
+  <meta property="og:description" content="{{reply.content|striptags}}">
+  <meta property="og:url" content="{{url}}">
+  <meta property="og:image" content="{{reply.uttle.imageUrl}}">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter META -->
+  <meta name="twitter:title" content="A Uttle about '{{reply.uttle.title}}'">
+  <meta name="twitter:description" content="{{reply.content|striptags}}">
+  <meta name="twitter:url" content="{{url}}">
+  <meta name="twitter:image" content="{{reply.uttle.imageUrl}}">
+
+  <!-- Fav Icon -->
+  <link href="{{favicon}}" rel="shortcut icon" type="image/x-icon">
+
+  <!-- Oembed -->
+  <link rel="alternate" type="application/json+oembed"
+  href="http://uttles.com/api/reply/oembed?url={{oUrl|url_encode}}&format=json"
+  title="A Uttle about {{reply.uttle.title}}" />
+  <link rel="alternate" type="text/xml+oembed"
+  href="http://uttles.com/api/reply/oembed?url={{oUrl|url_encode}}&format=xml"
+  title="A Uttle about {{reply.uttle.title}}" />
+
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  
+  <!-- Application CSS Files -->
+  {% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">{% endfor %}
+  
+</head>
+
+<body>
+  <header class="navbar navbar-fixed-top navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button class="navbar-toggle" type="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="/" class="navbar-brand">Uttles</a>
+      </div>
+      <nav class="collapse navbar-collapse" role="navigation">
+        <ul class="nav navbar-nav">
+          <li ui-sref-active="active">
+            <a href="/about">About</a>
+          </li>
+          <li class="divider-vertical"></li>
+          <li ui-sref-active="active">
+            <a href="/prolific">Prolific</a>
+          </li>
+          <li class="divider-vertical"></li>
+          <li ui-sref-active="active">
+            <a href="/create">Create</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li ui-sref-active="active">
+            <a href="/authentication/signup">Sign Up</a>
+          </li>
+          <li class="divider-vertical"></li>
+          <li ui-sref-active="active">
+            <a href="/authentication/signin">Sign In</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <section class="content">
+    <section class="container">
+      <div class="page-header">
+        <h4>{{reply.uttle.title}}</h4>    
+      </div>
+      <div class="row">
+        <div class="col-md-8">
+          {% if (reply.uttle.provider.url) %}
+          <a href="{{reply.uttle.provider.url}}" target="_blank"><img src="https://www.google.com/s2/favicons?domain={{ reply.uttle.provider.url }}" border="0"></a>
+          {% endif %}
+          <a href="{{reply.uttle.url}}" target="_blank">{{ reply.uttle.url }}</a>
+          <p>{{reply.uttle.summary}}</p>
+          <p>
+            <small>
+              <em class="text-muted">
+                Created
+                <span>{{reply.uttle.created | date('Y-m-d')}}</span>
+                by
+                {% if (reply.uttle.user) %}
+                <span>{{ reply.uttle.user.displayName }}</span>
+                {% else %}
+                <span>Deleted User</span>
+                {% endif %}
+                 -- Submitted
+                
+                <span>{{reply.uttle.submitters.length}}</span>
+                time{% if (reply.uttle.submitters.length > 1) %}s{% endif %}</span>
+                 - 
+                <span>{{reply.uttle.replyCount}}</span> 
+                <span>total replies</span>
+              </em>
+            </small>
+            <a href="http://uttles.com/authentication/signin">
+              <button type="button" class="btn btn-primary btn-sm pull-right">
+                <i class="glyphicon glyphicon-pencil"></i> 
+                Write Your Uttle
+              </button>
+            </a>
+          </p>
+          <p>
+            <small>
+              {% for tag in reply.uttle.tags %}
+              <span>
+                <a ui-sref="uttles.tag({'tag' : {{tag}}})">
+                  <span class="label label-info"><i class="glyphicon glyphicon-tag"></i> {{ tag }}</span> 
+                </a>
+              </span>
+              {% endfor %}
+            </small>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <a href="#" class="thumbnail">
+            {% if (reply.uttle.imageUrl) %}
+            <img src="{{reply.uttle.imageUrl}}">
+            {% else %}
+            <img src="http://i.imgur.com/4QaWChJ.png" alt="A thumbnail image by Andrew Fitzsimon.">
+            {% endif %}
+          </a>
+        </div>
+      </div>
+      <!-- This user's reply to the uttle -->
+      <div class="row">
+        <div class="col-md-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              A Uttle from {{ reply.user.displayName }} - <small>on {{ reply.created | date('Y-m-d') }}</small>
+            </div>
+            <div class="panel-body">
+              <span>{{ reply.content }}</span>
+              <div class="clearfix"></div>
+              <div class="pull-right">
+                <div share-links="Facebook, Twitter, LinkedIn, Google-Plus" share-title="Check out this Uttle!">  
+                </div>
+              </div>
+            </div>
+            <div class="panel-footer">
+              <div>
+                <a href="http://uttles.com/authentication/signin">
+                <button type="button" class="btn btn-sm btn-primary">
+                  <i class="glyphicon glyphicon-comment"></i> Reply to This
+                </button></a>
+                <a href="/{{ reply.uttle._id }}">
+                  <button type="button" class="btn btn-sm btn-default">
+                    <i class="glyphicon glyphicon-list"></i> All Uttles About This
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="alert alert-info">
+        <span>This is a static version of this page, to make things easier on search engines and other social sites. To see the live version, <a href="http://uttles.com/uttle/{{ reply._id | safe }}">click here.</a></span>
+        </div>
+      </div>
+      <!-- show replies to this user's reply -->
+      <div class="row">
+      <div class="col-md-12">
+        <div class="post-replies">
+
+{% macro replySpace(reply) %}
+<div>
+  <div class="media-heading">
+    <button class="btn btn-default btn-xs" type="button">
+    <span class="glyphicon glyphicon-minus"></span> 
+    </button> 
+    <span class="label label-primary">{{ reply.user.displayName }}</span> 
+
+    <span>{{ reply.created | date('Y-m-d') }}</span>
+    <span> -- {{ reply.replies.length }} replies</span>
+    {% if (reply.edited) %}
+    <span> -- edited {{ reply.edited | date('Y-m-d') }}</span>
+    {% endif %}
+  </div>
+
+  <div class="panel-collapse collapse in" collapse="false">
+    <div class="media-body">
+      <p>{{ reply.content }}</p>
+    </div>
+
+
+      {% for reply1 in reply.replies %}
+      <div class="media">
+        {{ replySpace(reply1) }}
+      </div>
+      </div>
+      </div>
+    {% endfor %}
+{% endmacro %}   
+
+            {% for reply in reply.replies %}
+            <div class="media">
+            {{ replySpace(reply) }}
+
+            </div>
+            </div>
+            </div>
+          {% endfor %}      
+        </div>
+      </div>
+    </section>
+  </section>
+
+      <div class="mastfoot">
+        <div class="inner">
+          <div class="pull-right">&#169; 2016 </div>
+        <a href="https://uttles.freshdesk.com/helpdesk/tickets/new" target="_new">
+        <button type="button" class="btn btn-info btn-xs">Report a Problem</button>
+        </a>
+        </div>
+      </div>
+
+
+  <!--Application JavaScript Files-->
+<script type="text/javascript" src="lib/angular/angular.min.js"></script><script type="text/javascript" src="lib/moment/min/moment.min.js"></script><script type="text/javascript" src="lib/angular-resource/angular-resource.min.js"></script><script type="text/javascript" src="lib/angular-animate/angular-animate.min.js"></script><script type="text/javascript" src="lib/angular-messages/angular-messages.min.js"></script><script type="text/javascript" src="lib/angular-ui-utils/ui-utils.min.js"></script><script type="text/javascript" src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+
+</body>
+
+</html>
+

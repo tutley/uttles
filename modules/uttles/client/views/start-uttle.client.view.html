@@ -1,0 +1,45 @@
+<section ng-controller="UttlesController">
+  <div class="page-header">
+    <h3>New Uttle</h3>
+  </div>
+  <div class="container">
+    <div class="alert alert-info">
+    <p>It's really easy to create a Uttle. First give us the URL (link) to whatever it is you want to write about.</p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="col-md-12">
+      <form name="uttleForm" class="form-horizontal" ng-submit="start(uttleForm.$valid)" novalidate>
+        <fieldset>
+          <div class="form-group" show-errors>
+            <label for="url">Enter URL here:</label>
+            <input name="url" type="text" ng-model="url" id="url" class="form-control" placeholder="http://www.somesite.com/something" autofocus required>
+            <div ng-messages="uttleForm.url.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">URL is required... it's kinda the point</p>
+            </div>
+          </div>     
+          <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Let's Go!">
+          </div>
+          <div ng-show="error" class="text-danger" ng-cloak>
+            <strong ng-bind="error"></strong>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    </div>
+
+      <!-- Update meta tags and title tags -->
+<update-title title="Uttles - A Website for Discussion"></update-title>
+<update-meta name="description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<!-- facebook -->
+<update-meta property="og:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta property="og:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta property="og:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+<!-- twitter -->
+<update-meta name="twitter:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta name="twitter:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta name="twitter:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+
+
+</section>

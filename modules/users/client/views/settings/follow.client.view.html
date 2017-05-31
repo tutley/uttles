@@ -1,0 +1,32 @@
+<section class="row" ng-controller="FollowController" ng-init="findFollows()">
+      <div class="col-sm-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">People I Follow</div>
+        <div class="panel-body">
+          <div class="link-group">
+            <a ng-href="/p/{{ user.username }}" ng-repeat="user in following" class="list-group-item">
+              <img ng-src="{{user.profileImageURL}}" class="header-profile-image" border="0">
+              &nbsp;{{ user.username }} <small>~ Joined <span am-time-ago="user.created"></span></small>
+              <span class="badge">{{ user.numFollowers }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">People Who Follow Me</div>
+        <div class="panel-body">
+          <div class="link-group">
+            <a ng-href="/p/{{ user.username }}" ng-repeat="user in followers" class="list-group-item">
+              <img ng-src="{{user.profileImageURL}}" class="header-profile-image" border="0">
+              &nbsp;{{ user.username }} <small>~ Joined <span am-time-ago="user.created"></span></small>
+              <span class="badge">{{ user.numFollowers }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</section>

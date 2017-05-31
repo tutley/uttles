@@ -1,0 +1,24 @@
+<section ng-controller="RepliesController" ng-init="find()">
+  <div class="row">
+    <div class="col-sm-5"></div>
+    <div class="col-sm-3">
+      <div class="btn-group" role="group">
+        <label class="btn btn-primary btn-xs disabled"><i class="glyphicon glyphicon-filter"></i></label>
+        <label class="btn btn-primary btn-xs" ng-model="everyone" btn-radio="true" ng-click="showAll()">Everyone</label>
+        <label class="btn btn-primary btn-xs" ng-if="authentication.user" ng-model="everyone" btn-radio="false" ng-click="showFollowing()">Following</label>        
+        <a class="btn btn-primary btn-xs" ng-if="!authentication.user" href="/authentication/signin">Following</a>
+      </div>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+  <div class="row">
+    <div class="post-replies col-sm-12">
+        <form name="replyForm">
+          <div class="media" ng-repeat="reply in replies" collapse="(!everyone && (authentication.user.following.indexOf(reply.user._id) < 0) && (authentication.user._id !== reply.user._id))">
+            <show-replies reply="reply"></show-replies>
+          </div>
+        </form>
+    </div>
+  </div>
+
+</section>

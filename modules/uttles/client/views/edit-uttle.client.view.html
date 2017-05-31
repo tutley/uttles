@@ -1,0 +1,28 @@
+<section ng-controller="UttlesController" ng-init="findOne()">
+  <div class="page-header">
+    <h3>Edit Uttle</h3>
+  </div>
+  <div class="col-md-12">
+    <form name="uttleForm" class="form-horizontal" ng-submit="update(uttleForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label for="title">Title</label>
+          <input name="title" type="text" ng-model="uttle.title" id="title" class="form-control" placeholder="Title" required>
+          <div ng-messages="uttleForm.title.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Uttle title is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="summary">Summary</label>
+          <textarea name="summary" ng-model="uttle.summary" id="summary" class="form-control" cols="30" rows="10" placeholder="Summary"></textarea>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Update" class="btn btn-default">
+        </div>
+        <div ng-show="error" class="text-danger" ng-cloak>
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>

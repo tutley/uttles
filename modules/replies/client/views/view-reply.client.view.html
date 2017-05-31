@@ -1,0 +1,145 @@
+<section ng-controller="RepliesController" ng-init="findOne()">
+  <div class="page-header">
+    <h4 ng-bind="reply.uttle.title"></h4>    
+  </div>
+  <div class="row">
+    <div class="col-sm-8">
+      <a ng-href="{{reply.uttle.provider.url}}" ng-if="reply.uttle.provider.url" target="_blank"><img ng-src="https://www.google.com/s2/favicons?domain={{ reply.uttle.provider.url }}" border="0"></a>
+      <a ng-href="{{reply.uttle.url}}" target="_blank">{{ reply.uttle.url | limitTo:80 }}</a>
+      <p ng-bind="reply.uttle.summary"></p>
+      <p>
+        <small>
+          <em class="text-muted">
+            Created
+            <span ng-bind="reply.uttle.created | date:'mediumDate'"></span>
+            by
+            <span ng-if="reply.uttle.user" ng-bind="reply.uttle.user.displayName"></span>
+            <span ng-if="!reply.uttle.user">Deleted User</span>
+             -- Submitted
+            <span ng-bind="reply.uttle.submitters.length"></span>
+            time<span ng-if="(reply.uttle.submitters.length > 1)">s</span>
+             - 
+            <span ng-bind="reply.uttle.replyCount"></span> 
+            <span ng-if="(reply.uttle.replyCount == 1)">total reply</span>
+            <span ng-if="(reply.uttle.replyCount > 1 || uttle.replyCount == 0)">total replies</span>
+          </em>
+        </small>
+        <a ng-href="/create/{{ reply.uttle._id }}" ng-if="topReplyAvailable">
+          <button type="button" class="btn btn-primary btn-sm pull-right">
+            <i class="glyphicon glyphicon-pencil"></i> 
+            Write Your Uttle
+          </button>
+        </a>
+      </p>
+      <p>
+        <small>
+          <span ng-repeat="tag in reply.uttle.tags">
+            <a ui-sref="uttles.tag({'tag' : tag})">
+              <span class="label label-info"><i class="glyphicon glyphicon-tag"></i> {{ tag }}</span> 
+            </a>
+          </span>
+        </small>
+      </p>
+    </div>
+    <div class="col-sm-3">
+      <a href="#" class="thumbnail">
+        <img ng-if="reply.uttle.imageUrl" ng-src="{{reply.uttle.imageUrl}}">
+        <img ng-if="!reply.uttle.imageUrl" src="http://i.imgur.com/4QaWChJ.png" alt="A thumbnail image by Andrew Fitzsimon.">
+      </a>
+    </div>
+    <div class="col-sm-1" ng-show="authentication.user.roles.indexOf('admin') > -1">  
+      <a class="btn btn-primary" ui-sref="uttles.edit({uttleId: reply.uttle._id})">
+        <i class="glyphicon glyphicon-edit"></i>
+      </a>
+      <a class="btn btn-primary" ng-click="remove();">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </div>
+  </div>
+  <!-- This user's reply to the uttle -->
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          A Uttle from 
+          <a ng-href="/p/{{ reply.user.username }}" class="btn btn-default btn-xs">{{ reply.user.displayName }}</a>
+           - <small>on {{ reply.created | date:'mediumDate' }}</small>
+        </div>
+        <div class="panel-body">
+          <span class="comment" ng-bind-html="reply.content | linky:'_blank'"></span>
+          <div class="clearfix"></div>
+          <div class="pull-right">
+            <div share-links="Facebook, Twitter, LinkedIn, Google-Plus" share-title="Check out this Uttle!">  
+            </div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div collapse="currentReplyId === reply._id">
+            <button type="button" class="btn btn-sm btn-primary" ng-click="showReplyForm(reply._id)">
+              <i class="glyphicon glyphicon-comment"></i> Reply to This
+            </button>
+            <a  ng-href="/{{ reply.uttle._id }}">
+              <button type="button" class="btn btn-sm btn-default">
+                <i class="glyphicon glyphicon-list"></i> All Uttles About This
+              </button>
+            </a>
+          </div>
+          <!--       New  Reply form - only shows after reply clicked -->
+          <div collapse="!(currentReplyId === reply._id)"  ng-if="authentication.user" ng-cloak>
+            <div class="form-group">
+              <label for="newreply-{{ reply._id }}">Your Reply:</label>
+              <textarea name="rewreply-{{ reply._id }}" ng-model="reply.newReply" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm" ng-click="create(reply)">Submit</button>
+            <button class="btn btn-default btn-sm" ng-click="reply.newReply='';cancelReply()">Cancel</button>
+            <div ng-show="reply.error" class="text-danger">
+              <strong ng-bind="reply.error"></strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+  </div>
+
+<div class="row">
+    <div class="col-sm-3" style="margin-bottom: 8px;">
+      <div class="btn-group" role="group">
+        <label class="btn btn-primary btn-xs disabled"><i class="glyphicon glyphicon-filter"></i></label>
+        <label class="btn btn-primary btn-xs" ng-model="everyone" btn-radio="true" ng-click="showAll()">Everyone</label>
+        <label class="btn btn-primary btn-xs" ng-if="authentication.user" ng-model="everyone" btn-radio="false" ng-click="showFollowing()">Following</label>        
+        <a class="btn btn-primary btn-xs" ng-if="!authentication.user" href="/authentication/signin">Following</a>
+      </div>
+    </div>
+    <div class="col-sm-9"></div>
+  </div>
+
+  <!-- show replies to this user's reply -->
+  <div class="row" ng-cloak>
+  <div class="col-sm-12">
+    <div class="post-replies">
+        <form name="replyForm">
+          <div class="media" ng-repeat="reply in reply.replies" collapse="(!everyone && (authentication.user.following.indexOf(reply.user._id) < 0) && (authentication.user._id !== reply.user._id))">
+            <show-replies reply="reply"></show-replies>
+          </div>
+        </form>
+    </div>
+  </div></div>
+
+<!-- Update meta tags and title tags -->
+<update-title title="A Uttle about {{ reply.uttle.title }}"></update-title>
+<update-meta name="description" content="{{ reply.content | limitTo : 200 }}"></update-meta>
+<!-- facebook -->
+<update-meta property="og:title" content="A Uttle about {{ reply.uttle.title }}"></update-meta>
+<update-meta property="og:description" content="{{ reply.content | limitTo : 200 }}"></update-meta>
+<update-meta ng-if="reply.uttle.imageUrl" property="og:image" content="{{reply.uttle.imageUrl}}"></update-meta>
+<update-meta ng-if="!reply.uttle.imageUrl" property="og:image" content="http://i.imgur.com/4QaWChJ.png"></update-meta>
+<update-meta property="og:type" content="uttlescom:uttle">
+<!-- twitter -->
+<update-meta name="twitter:title" content="A Uttle about {{ reply.uttle.title }}"></update-meta>
+<update-meta name="twitter:description" content="{{ reply.content | limitTo : 200 }}"></update-meta>
+<update-meta ng-if="reply.uttle.imageUrl" name="twitter:image" content="{{reply.uttle.imageUrl}}"></update-meta>
+<update-meta ng-if="!reply.uttle.imageUrl" name="twitter:image" content="http://i.imgur.com/4QaWChJ.png"></update-meta>
+
+
+
+</section>

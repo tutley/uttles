@@ -1,0 +1,95 @@
+<section ng-controller="ProfilesController" ng-init="findProlific()">
+  <div class="page-header">
+    <h3>Prolific Users <small>The top participants at Uttles.com</small></h3>      
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Top Users By Replies</div>
+        <div class="panel-body">
+          <div class="link-group">
+            <a ng-href="/p/{{ item.user.username }}" ng-repeat="item in topByReplies" class="list-group-item">
+              <div class="row">
+                <div class="col-xs-2">
+                  <img ng-src="{{item.user.profileImageURL}}" class="header-profile-image" border="0">
+                </div>
+                <div class="col-xs-7">
+                  <strong>{{ item.user.username }}</strong><br />
+                  <small>Joined <span am-time-ago="item.user.created"></span></small>
+                </div>
+                <div class="col-xs-1">
+                  <span class="badge">{{ item.count }}</span>
+                </div>
+                <div class="col-xs-2"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Top Users By Submissions</div>
+        <div class="panel-body">
+          <div class="link-group">
+            <a ng-href="/p/{{ item.user.username }}" ng-repeat="item in topBySubmissions" class="list-group-item">
+              <div class="row">
+                <div class="col-xs-2">
+                  <img ng-src="{{item.user.profileImageURL}}" class="header-profile-image" border="0">
+                </div>
+                <div class="col-xs-7">
+                  <strong>{{ item.user.username }}</strong><br />
+                  <small>Joined <span am-time-ago="item.user.created"></span></small>
+                </div>
+                <div class="col-xs-1">
+                  <span class="badge">{{ item.count }}</span>
+                </div>
+                <div class="col-xs-2"></div>
+              </div>             
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Top Users By Followers</div>
+        <div class="panel-body">
+          <div class="link-group">
+            <a ng-href="/p/{{ user.username }}" ng-repeat="user in topByFollowers" class="list-group-item" ng-if="user.numFollowers>0">
+              <div class="row">
+                <div class="col-xs-2">
+                  <img ng-src="{{user.profileImageURL}}" class="header-profile-image" border="0">
+                </div>
+                <div class="col-xs-7">
+                  <strong>{{ user.username }}</strong><br />
+                  <small>Joined <span am-time-ago="user.created"></span></small>
+                </div>
+                <div class="col-xs-1">
+                  <span class="badge">{{ user.numFollowers }}</span>
+                </div>
+                <div class="col-xs-2"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Update meta tags and title tags -->
+<update-title title="Uttles - A Website for Discussion"></update-title>
+<update-meta name="description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<!-- facebook -->
+<update-meta property="og:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta property="og:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta property="og:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+<!-- twitter -->
+<update-meta name="twitter:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta name="twitter:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta name="twitter:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+
+
+</section>

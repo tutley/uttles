@@ -1,0 +1,134 @@
+<section ng-controller="UttlesController" ng-init="find()" ng-cloak>
+<!--   <div class="page-header">
+     <h4>Debugging</h4>
+    <p>{{ totalUttles }} uttles</p>
+    <p>{{ perPage }} uttles per page</p>
+    <p>current page: {{ currentPage }}</p>
+    </div>
+  </div> -->
+    <div class="row" style="padding: 8px 0 8px 0;">
+      <div class="col-sm-4">
+        <div class="btn-group" role="group">       
+          <label class="btn btn-primary btn-xs disabled"><i class="glyphicon glyphicon-filter"></i></label>
+          <label class="btn btn-primary btn-xs" ng-model="alltime" btn-radio="'0'" ng-click="relist({'alltime':'0'})">Recent</label>
+          <label class="btn btn-primary btn-xs" ng-model="alltime" btn-radio="'1'" ng-click="relist({'alltime':'1'})">All-Time</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="btn-group" role="group">
+          <label class="btn btn-primary btn-xs disabled"><i class="glyphicon glyphicon-filter"></i></label>
+          <label class="btn btn-primary btn-xs" ng-model="everyone" btn-radio="'1'" ng-click="relist({'everyone':'1'})">Everyone</label>
+          <a class="btn btn-primary btn-xs" ng-if="!authentication.user" href="/authentication/signin">Following</a>
+          <label class="btn btn-primary btn-xs" ng-if="authentication.user" ng-model="everyone" btn-radio="'0'" ng-click="relist({'everyone':'0'})">Following</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="btn-group pull-right" role="group">      
+          <label class="btn btn-primary btn-xs disabled"><i class="glyphicon glyphicon-sort"></i></label>
+          <label class="btn btn-primary btn-xs" ng-model="sort" btn-radio="'created'" ng-click="relist({'sort':'created'})">Newest</label>
+          <label class="btn btn-primary btn-xs" ng-model="sort" btn-radio="'submissions'" ng-click="relist({'sort':'submissions'})">Submissions</label>
+          <label class="btn btn-primary btn-xs" ng-model="sort" btn-radio="'replyCount'" ng-click="relist({'sort':'replyCount'})">Replies</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-8">
+        <!-- Pagination -->
+        <pagination boundary-links="true" total-items="totalUttles" max-size="8" items-per-page="perPage" ng-model="currentPage" ng-change="pageChanged(currentPage)" class="pagination" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+      </div>
+      <div class="col-sm-4">
+        <form name="uttleSearch" ng-submit="relist({'q': searchText})">
+          <div class="input-group input-group-xs">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+            <input class="form-control" type="text" ng-model="searchText" placeholder="Find Uttles">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Search</button>
+            </span>
+          </div>
+        </form>            
+      </div>      
+    </div>
+
+  <ul class="list-group">
+    <li ng-repeat="uttle in uttles" class="list-group-item">
+    <div class="row">
+        <div class="col-md-9">
+          <a ng-href="{{uttle.provider.url}}" ng-if="uttle.provider.url" target="_blank"><img ng-src="https://www.google.com/s2/favicons?domain={{ uttle.provider.url }}" border="0"></a>
+          <small class="list-group-item-text">
+            Submitted on
+            <span ng-bind="uttle.created | date:'mediumDate'"></span>
+            by
+            <span ng-if="uttle.user" ng-bind="uttle.user.displayName"></span>
+            <span ng-if="!uttle.user">Deleted User</span>
+          
+            <div class="pull-right">
+            <span class="label label-default" ng-if="uttle.submissions<2">
+              <i class="glyphicon glyphicon-save"></i>&nbsp; 
+              {{ uttle.submissions }}
+            </span>
+            <span class="label label-success" ng-if="uttle.submissions>1 && uttle.submissions<6">
+              <i class="glyphicon glyphicon-save"></i>&nbsp;              
+              {{ uttle.submissions }}
+            </span>
+            <span class="label label-primary" ng-if="uttle.submissions>5 && uttle.submissions<40">
+              <i class="glyphicon glyphicon-save"></i>&nbsp; 
+              {{ uttle.submissions }}
+            </span>
+            <span class="label label-danger" ng-if="uttle.submissions>39">
+              <i class="glyphicon glyphicon-save"></i>&nbsp; 
+              {{ uttle.submissions }}
+            </span>
+            &nbsp;
+            <span class="label label-default" ng-if="uttle.replyCount<2">
+              <i class="glyphicon glyphicon-comment"></i>&nbsp; 
+              {{ uttle.replyCount }}
+            </span>
+            <span class="label label-success" ng-if="uttle.replyCount>1 && uttle.replyCount<6">
+              <i class="glyphicon glyphicon-comment"></i>&nbsp; 
+              {{ uttle.replyCount }}
+            </span>
+            <span class="label label-primary" ng-if="uttle.replyCount>5 && uttle.replyCount<40">
+              <i class="glyphicon glyphicon-comment"></i>&nbsp; 
+              {{ uttle.replyCount }}
+            </span>
+            <span class="label label-danger" ng-if="uttle.replyCount>39">
+              <i class="glyphicon glyphicon-comment"></i>&nbsp; 
+              {{ uttle.replyCount }}
+            </span>
+            </div>
+          </small>
+          <p></p>
+          <a ui-sref="uttles.view({uttleId: uttle._id})">
+            <h5 class="list-group-item-heading"><strong>{{ uttle.title }}</strong></h5>
+          </a> 
+        </div>
+        <div class="col-md-3">
+          <small>
+            <span ng-repeat="tag in uttle.tags">
+              <a ng-click="relist({'tag' : tag})">
+                <span class="label label-info"><i class="glyphicon glyphicon-tag"></i> {{ tag }}</span> 
+              </a>
+            </span>
+          </small>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+
+
+  <!-- Update meta tags and title tags -->
+<update-title title="Uttles - A Website for Discussion"></update-title>
+<update-meta name="description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<!-- facebook -->
+<update-meta property="og:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta property="og:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta property="og:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+<!-- twitter -->
+<update-meta name="twitter:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta name="twitter:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta name="twitter:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+
+
+
+</section>

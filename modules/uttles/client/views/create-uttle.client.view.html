@@ -1,0 +1,96 @@
+<section ng-controller="UttlesController" ng-init="findOne()">
+  <div class="row" ng-if="userHasUttle" ng-cloak>
+    <p class="alert alert-danger">Hey! You've already created a Uttle about this!</p>
+  </div>
+  <div class="row" ng-if="uttle" ng-cloak>
+    <h4 ng-if="!userHasUttle">Here's what we found. Write your Uttle and press "Finish!" when you're done.</h4>
+    <div class="col-md-9">
+      <form name="uttleForm" class="form-horizontal" ng-submit="create()" novalidate ng-cloak>
+        <fieldset>
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input ng-show="!uttle.title" name="title" type="text" ng-model="newUttle.title" id="title" class="form-control" placeholder="Please give this item a descriptive Title">
+            <div ng-if="uttle.title" class="form-control-static">
+              <p><span ng-bind="uttle.title"></span></p>
+            </div>
+            <div ng-show="createErrors.title" role="alert" class="alert alert-danger">
+              <p>Uttle title is required.</p>
+            </div>
+          </div>
+          <div class="form-group" ng-cloak>
+            <label for="summary">Summary</label>
+            <textarea ng-show="!uttle.summary" name="summary" ng-model="newUttle.summary" id="summary" class="form-control" cols="30" rows="5" placeholder="We didn't find a description for this content. Please give us a neutral summary of the item and feel free to editorialize in your Uttle!"></textarea>
+            <div class="form-control-static" ng-if="uttle.summary">
+              <p><span ng-bind="uttle.summary"></span></p>
+              <small> -- Submitted
+              <span ng-bind="uttle.submitters.length"></span>
+              time<span ng-if="(uttle.submitters.length > 1)">s</span>
+              </small>
+            </div>
+            <div ng-show="createErrors.summary" role="alert" class="alert alert-danger">
+              <p>Uttle summary is required.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tags">Tags <small ng-if="uttle.tags.length < 12">({{ (12-uttle.tags.length) }} spots left)</small></label>
+            <p>
+              <small>
+                <span ng-repeat="tag in uttle.tags">
+                  <a href="#">
+                    <span class="label label-info"><i class="glyphicon glyphicon-tag"></i> {{ tag | lowercase }}</span> 
+                  </a>
+                </span>
+              </small>
+            </p>
+            <input ng-show="(!uttle.tags || uttle.tags.length < 12)" name="tags" ng-model="newUttle.tags" ng-list id="tags" class="form-control" placeholder="tag1, tag2, tag3">
+            <div ng-show="createErrors.tags" role="alert" class="alert alert-danger">
+              <p>Sorry, there is only room for {{ (12-uttle.tags.length) }} more tags.</p>
+            </div>
+          </div>
+          <div class="form-group" ng-if="!userHasUttle" ng-cloak>
+            <label for="yourUttle">Your Uttle</label>
+            <textarea name="yourUttle" ng-model="newUttle.content" id="yourUttle" class="form-control" cols="30" rows="10" placeholder="This is where you write your Uttle!"></textarea>
+            <div ng-show="createErrors.content" role="alert" class="alert alert-danger">
+              <p>Your Uttle is not only required, <strong>It's the most important part!</strong></p>
+            </div>
+          </div>
+          <div class="form-group" ng-if="!userHasUttle" ng-cloak>
+            <input type="submit" value="Finish!" class="btn btn-primary">
+          </div>
+          <div class="form-group" ng-if="userHasUttle">
+            <a ng-href="/{{ uttle._id }}"><button type="button" class="btn btn-danger">Cancel</button></a>
+          </div>
+          <div ng-show="error" class="alert alert-danger" ng-cloak>
+            <strong ng-bind="error"></strong>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="col-md-3">
+      <a href="#" class="thumbnail">
+        <img ng-if="uttle.imageUrl" ng-src="{{uttle.imageUrl}}">
+        <img ng-if="!uttle.imageUrl" src="http://i.imgur.com/4QaWChJ.png" alt="A thumbnail image by Andrew Fitzsimon.">
+      </a>
+    </div>
+  </div>
+<div class="row" ng-if="!uttle">
+  <div class="alert alert-danger">
+    <h4>Danger!</h4>
+    <p>Something has gone drastically wrong!<p>
+    <a href="/"><button type="button" class="btn btn-default">Take me to Safety</button></a>
+  </div>
+</div>
+  <!-- Update meta tags and title tags -->
+<update-title title="Uttles - A Website for Discussion"></update-title>
+<update-meta name="description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<!-- facebook -->
+<update-meta property="og:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta property="og:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta property="og:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+<!-- twitter -->
+<update-meta name="twitter:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta name="twitter:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta name="twitter:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+
+
+</section>

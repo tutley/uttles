@@ -1,0 +1,97 @@
+<section ng-controller="ProfilesController" ng-init="findByUsername()">
+<div class="container">
+  <div class="row profile">
+	<div class="col-md-3">
+		<div class="profile-sidebar">
+			<div class="profile-userpic">
+				<img ng-src="{{ profile.profileImageURL }}" class="img-responsive" alt="">
+			</div>
+			<div class="profile-usertitle">
+				<div class="profile-usertitle-name">
+					{{ profile.username }}
+				</div>
+				<div class="profile-usertitle-job">
+					{{ profile.displayName }}
+				</div>
+			</div>
+			<div class="profile-userbuttons">
+				<button type="button" class="btn btn-primary btn-sm" ng-click="follow(profile._id)" collapse="isFollowed || isMe">
+				<i class="glyphicon glyphicon-ok"></i> Follow
+				</button>				
+				<button type="button" class="btn btn-danger btn-sm" ng-click="unfollow(profile._id)" collapse="!isFollowed || isMe">
+				<i class="glyphicon glyphicon-remove"></i> Unollow
+				</button>								
+				<button type="button" class="btn btn-info btn-sm" collapse="!isMe">
+				<i class="glyphicon glyphicon-user"></i> Me
+				</button>
+				<!-- <button type="button" class="btn btn-info btn-sm">Message</button>-->
+			</div> 
+			<div class="profile-usermenu">
+				<ul class="nav">
+					<li>
+						<a href="#" title="Joined">
+						<i class="glyphicon glyphicon-calendar"></i>
+						<time>{{ profile.created | amCalendar }}</time></a>
+					</li>
+					<li>
+						<a href="#" title="Followers">
+						<i class="glyphicon glyphicon-user"></i> {{ profile.numFollowers }} Followers
+						</a>
+					</li>
+				</ul>
+			</div> 
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div class="alert alert-danger" ng-show="error" ng-cloak>
+			{{ error }}
+		</div>
+		<h4>My Uttles <small>(Page {{ currentPage }} of {{ totalPages }})</small></h4>
+		<accordion close-others="true">
+	    <accordion-group is-open="status.open" ng-repeat="reply in theReplies">
+        <accordion-heading>
+          {{ reply.uttle.title }} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+        </accordion-heading>
+		      <div class="row">
+		      	<div class="col-sm-9">
+			      	<p class="well">{{ reply.content }}</p>
+			      	<small>
+		      			<time title="{{ reply.created | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}" am-time-ago="reply.created"></time>
+		      			&nbsp; - &nbsp;
+		      			<i class="glyphicon glyphicon-comment"></i> {{ reply.replies.length }} replies to this
+		      			&nbsp; - &nbsp;
+		      			<i class="glyphicon glyphicon-link"></i>
+		      			<a ng-href="/uttle/{{ reply._id }}">Direct Link</a>
+			      	</small>
+		  			</div>
+		  			<div class="col-sm-3">
+				      <a ng-href="/uttle/{{ reply._id }}" class="thumbnail">
+				        <img ng-if="reply.uttle.imageUrl" ng-src="{{reply.uttle.imageUrl}}">
+				        <img ng-if="!reply.uttle.imageUrl" src="http://i.imgur.com/4QaWChJ.png" alt="A thumbnail image by Andrew Fitzsimon.">
+				      </a>
+		  			</div>
+		      </div>
+    	</accordion-group>
+  	</accordion>
+		<!-- Pagination -->
+		<center>
+			<pagination boundary-links="true" total-items="totalReplies" max-size="8" items-per-page="perPage" ng-model="currentPage" ng-change="userReplies(currentPage)" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+		</center>
+  </div>
+
+
+    <!-- Update meta tags and title tags
+    TODO: Change these values to be about this user  -->
+<update-title title="Uttles - A Website for Discussion"></update-title>
+<update-meta name="description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<!-- facebook -->
+<update-meta property="og:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta property="og:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta property="og:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+<!-- twitter -->
+<update-meta name="twitter:title" content="Uttles - A Website for Discussion"></update-meta>
+<update-meta name="twitter:description" content="Uttles.com is a website for quickly and easily publishing your opinion about anything on the internet, and discussing things with anyone and everyone."></update-meta>
+<update-meta name="twitter:image" content="http://uttles.com/modules/core/client/img/brand/logo.png"></update-meta>
+
+
+</section>
